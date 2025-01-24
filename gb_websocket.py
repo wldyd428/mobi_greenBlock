@@ -52,7 +52,7 @@ async def websocket_endpoint(websocket:WebSocket):
     await manager.connect(websocket)
     while True:
       data = await websocket.receive_json()
-      print(f'recv_data: {data}')
+      # print(f'recv_data: {data}')
 
       await manager.send_data_to_all(data)
   except WebSocketDisconnect:
