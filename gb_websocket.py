@@ -25,6 +25,8 @@ class ConnectionManager:
     if websocket in self.activate_connections:
       try:
         await websocket.close(code=1000, reason="Normal closure")
+      except RuntimeError as e:
+        print(f"=== WebSocket already closed === : {e}")
       except Exception as e:
         print(f"=== Error during WebSocket close === : {e}")
       finally:
