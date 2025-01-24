@@ -17,7 +17,9 @@ class ConnectionManager:
   async def connect(self, websocket:WebSocket):
     await websocket.accept()
     self.activate_connections.append(websocket)
-    print("=== connecting!! ===", time.strftime('%Y-%m-%d %H:%M:%S'))
+    client_address = websocket.client
+    # print("=== connecting!! ===", time.strftime('%Y-%m-%d %H:%M:%S'))
+    print(f"=== connecting!! === {client_address}")
 
   async def disconnect(self, websocket: WebSocket):
     if websocket in self.activate_connections:
