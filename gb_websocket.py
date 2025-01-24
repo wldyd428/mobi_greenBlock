@@ -64,5 +64,5 @@ async def websocket_endpoint(websocket:WebSocket):
 
 if __name__ == "__main__":
   HOST = os.getenv('HOST')
-  PORT = os.getenv('PORT')
+  PORT = int(os.getenv('PORT'))
   uvicorn.run(app, host=HOST, port=PORT)
