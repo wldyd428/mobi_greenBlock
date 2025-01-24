@@ -59,9 +59,9 @@ async def websocket_endpoint(websocket:WebSocket):
       await manager.send_data_to_all(data)
   except WebSocketDisconnect:
     print(f'=== Client disconnected === : {websocket.client}')
-    await manager.disconnect(websocket)
   except Exception as e:
     print(f'=== Error occurred === : {e}')
+  finally:
     await manager.disconnect(websocket)
 
 if __name__ == "__main__":
