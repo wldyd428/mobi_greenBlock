@@ -39,6 +39,8 @@ class ConnectionManager:
     for connection in self.activate_connections:
       if connection != sender:
         try:
+          # logger.info(f"connection: {connection}")
+          # logger.info(f"sender: {sender}")
           await connection.send_json(data)
 
         except Exception as e:
@@ -58,7 +60,7 @@ async def websocket_endpoint(websocket:WebSocket):
       data = await websocket.receive_json()
       # logger.info(f'recv_data: {data}')
 
-      await manager.send_data_to_all(data)
+      await manager.send_data_to_all(data, sender=websocket)
   except WebSocketDisconnect:
     logger.info(f'=== Client disconnected === : {websocket.client}')
   except Exception as e:
