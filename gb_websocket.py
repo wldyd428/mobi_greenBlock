@@ -18,7 +18,6 @@ class ConnectionManager:
     await websocket.accept()
     self.activate_connections.append(websocket)
     client_address = websocket.client
-    # print("=== connecting!! ===", time.strftime('%Y-%m-%d %H:%M:%S'))
     print(f"=== connecting!! === {client_address}")
 
   async def disconnect(self, websocket: WebSocket):
@@ -38,8 +37,6 @@ class ConnectionManager:
       if connection != sender:
         try:
           await connection.send_json(data)
-
-          # db 저장 코드 작성 예정
 
         except Exception as e:
           print(f'=== Error sending data === : {e}')
