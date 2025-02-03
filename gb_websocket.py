@@ -1,6 +1,5 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from typing import List
-import time
 import uvicorn
 from dotenv import load_dotenv
 import os
