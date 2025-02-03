@@ -3,11 +3,15 @@ from typing import List
 import uvicorn
 from dotenv import load_dotenv
 import os
+import logging
 
 # python3.11 gb_websocket.py
 
 app = FastAPI()
 load_dotenv()
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 class ConnectionManager:
   def __init__(self):
@@ -17,16 +21,16 @@ class ConnectionManager:
     await websocket.accept()
     self.activate_connections.append(websocket)
     client_address = websocket.client
-    print(f"=== connecting!! === {client_address}")
+    logger.info(f"=== connecting!! === {client_address}")
 
   async def disconnect(self, websocket: WebSocket):
     if websocket in self.activate_connections:
       try:
         await websocket.close(code=1000, reason="Normal closure")
       except RuntimeError as e:
-        print(f"=== WebSocket already closed === : {e}")
+        logger.info(f"=== WebSocket already closed === : {e}")
       except Exception as e:
-        print(f"=== Error during WebSocket close === : {e}")
+        logger.error(f"=== Error during WebSocket close === : {e}")
       finally:
         self.activate_connections.remove(websocket)
 
@@ -38,7 +42,7 @@ class ConnectionManager:
           await connection.send_json(data)
 
         except Exception as e:
-          print(f'=== Error sending data === : {e}')
+          logger.error(f'=== Error sending data === : {e}')
           disconnected_ws.append(connection)
 
     for ws in disconnected_ws:
@@ -52,13 +56,13 @@ async def websocket_endpoint(websocket:WebSocket):
     await manager.connect(websocket)
     while True:
       data = await websocket.receive_json()
-      # print(f'recv_data: {data}')
+      # logger.info(f'recv_data: {data}')
 
       await manager.send_data_to_all(data)
   except WebSocketDisconnect:
-    print(f'=== Client disconnected === : {websocket.client}')
+    logger.info(f'=== Client disconnected === : {websocket.client}')
   except Exception as e:
-    print(f'=== Error occurred === : {e}')
+    logger.error(f'=== Error occurred === : {e}')
   finally:
     await manager.disconnect(websocket)
 
